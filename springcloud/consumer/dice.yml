@@ -1,0 +1,18 @@
+version: "2.0"
+services:
+  nacos-consumer:
+    ports:
+      - 18082
+    expose:
+      - 18082
+    resources:
+      cpu: 0.2
+      mem: 512
+    deployments:
+      replicas: 1
+addons:
+  register:
+    plan: "registercenter:basic"
+    options:
+      version: "2.0.0"
+envs: {}
