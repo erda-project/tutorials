@@ -1,0 +1,23 @@
+version: "2.0"
+services:
+  hello:
+    ports:
+      - 8080
+    expose:
+      - 8080
+    resources:
+      cpu: 0.2
+      mem: 512
+    deployments:
+      replicas: 1
+    health_check:
+      http:
+        port: 8080
+        path: "/health"
+        duration: 60
+addons:
+  日志分析:
+    plan: "log-analytics:basic"
+    options:
+      version: "2.0.0"
+envs: {}
