@@ -1,0 +1,16 @@
+version: "2.0"
+services:
+  nacos-provider:
+    ports:
+      - 8089
+    resources:
+      cpu: 0.2
+      mem: 512
+    deployments:
+      replicas: 1
+addons:
+  register:
+    plan: "registercenter:basic"
+    options:
+      version: "2.0.0"
+envs: {}

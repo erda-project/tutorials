@@ -1,0 +1,54 @@
+version: '1.1'
+
+stages:
+- stage:
+  - git-checkout:
+
+- stage:
+  - java:
+      alias: bp-web
+      params:
+        build_type: maven
+        workdir: ${git-checkout}
+        options: -am -pl web
+        target: ./web/target/web.jar
+        container_type: spring-boot
+      resources:
+        cpu: 0.2
+        mem: 512
+  - java:
+      alias: bp-admin
+      params:
+        build_type: maven
+        workdir: ${git-checkout}
+        options: -am -pl admin
+        target: ./admin/target/admin.jar
+        container_type: spring-boot
+      resources:
+        cpu: 0.2
+        mem: 512
+  - java:
+      alias: bp-user
+      params:
+        build_type: maven
+        workdir: ${git-checkout}
+        options: -am -pl user
+        target: ./user/target/user.jar
+        container_type: spring-boot
+      resources:
+        cpu: 0.2
+        mem: 512
+
+- stage:
+  - release:
+      params:
+        dice_yml: ${git-checkout}/dice.yml
+        image:
+          web: ${bp-web:OUTPUT:image}
+          admin: ${bp-admin:OUTPUT:image}
+          user: ${bp-user:OUTPUT:image}
+
+- stage:
+  - dice:
+      params:
+        release_id: ${release:OUTPUT:releaseID}

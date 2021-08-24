@@ -1,0 +1,31 @@
+version: '1.1'
+
+stages:
+# 拉取代码
+- stage:
+  - git-checkout: # 没有特别的参数，可以省略 params，默认为当前代码仓库
+
+# 打包，构造 `镜像` (image)
+- stage:
+  - java:
+      alias: bp-hello # 多个 java-action 存在时，请使用 alias 区分
+      params:
+        build_type: maven # 打包类型，这里选用 maven 打包
+        workdir: ${git-checkout}/dubbo-spring-boot-provider # 打包时的当前路径，此路径一般为根 pom.xml 的路径
+        #options: -am -pl . # maven 打包参数，比如打包 user 模块使用命令 `mvn clean package -am -pl user`，这里省略命令 `mvn clean package` 只需要填写参数
+        target: ./target/dubbo-spring-boot-provider.jar # 打包产物，一般为 jar，填写相较于 workdir 的相对路径。文件必须存在，否则将会出错。
+        container_type: spring-boot # 运行 target（如 jar）所需的容器类型，比如这里我们打包的结果是 spring-boot 的 fat jar，故使用 spring-boot container
+
+# 打造制品 (release)
+- stage:
+  - release:
+      params:
+        dice_yml: ${git-checkout}/dice.yml # dice.yml 为部署内容的描述文件
+        image: # 需要将打包产出的 image 填充进 dice.yml 中各个 services 中去，下面的 hello 为 dice.yml 中描述的一个 service
+          nacos-provider: ${bp-hello:OUTPUT:image} # 选取此前 stage 中打包产出的镜像，使用 ${<name or alias>:OUTPUT:image} 的语法
+
+# 部署
+- stage:
+  - dice:
+      params:
+        release_id: ${release:OUTPUT:releaseID}
