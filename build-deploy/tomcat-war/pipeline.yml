@@ -1,0 +1,27 @@
+version: '1.1'
+
+stages:
+- stage:
+  - git-checkout:
+
+- stage:
+  - java:
+      params:
+        build_type: maven
+        workdir: ${git-checkout}     # 执行编译的工作路径 (若 build_type 为 maven 则为父 pom.xml 所在路径)
+        #options: -am -pl .         # 多模块时需要指定模块
+        target: ./target/jspwar.war  # 编译出的结果, 填写基于 workdir 的相对路径
+        container_type: tomcat       # 容器运行类型, 可选 spring-boot, tomcat
+        container_version: v7.0.96-jdk8 # 可选: v8.5.43-jdk8, v7.0.96-jdk8 默认: v8.5.43-jdk8
+
+- stage:
+  - release:
+      params:
+        dice_yml: ${git-checkout}/dice.yml
+        image:
+          demo: ${java:OUTPUT:image}
+
+- stage:
+  - dice:
+      params:
+        release_id_path: ${release}

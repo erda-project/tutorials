@@ -1,0 +1,23 @@
+version: '1.1'
+
+stages:
+- stage:
+  - git-checkout:
+
+- stage:
+  - dockerfile:
+      params:
+        workdir: ${git-checkout}
+        path: Dockerfile
+
+- stage:
+  - release:
+      params:
+        dice_yml: ${git-checkout}/dice.yml
+        image:
+          web: ${dockerfile:OUTPUT:image}
+
+- stage:
+  - dice:
+      params:
+        release_id_path: ${release}

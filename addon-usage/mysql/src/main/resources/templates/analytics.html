@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>Analytics</title>
+    <meta name='keywords' content="terminus analytics">
+    <link rel="stylesheet" href="/assets/styles/before.css">
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+    var _taConfig={enabled: true, ak: /*[[${terminusKey}]]*/, url: "//analytics.terminus.io/ta.js", collectorUrl: /*[[${terminusCollectorUrl}]]*/};_taConfig&&_taConfig.enabled&&(!function(a,n,t,e,i,r,o){a[i]=a[i]||function(){(a[i].q=a[i].q||[]).push(arguments)},a.onerror=function(n,t,e,r,o){a[i]("sendExecError",n,t,e,r,o)},n.addEventListener("error",function(n){a[i]("sendError",n)},!0),r=n.createElement(t),o=n.getElementsByTagName(t)[0],r.async=1,r.src=e,o.parentNode.insertBefore(r,o)}(window,document,"script",_taConfig.url,"$ta"),$ta("start",{udata:{uid:0},ak:_taConfig.ak,url:_taConfig.collectorUrl}))
+    /*]]>*/
+    </script>
+    <script>
+      var a = b;
+    </script>
+    <link rel="stylesheet" href="/assets/styles/after.css">
+  </head>
+  <body>
+    Hello Terminus Analytics
+    <img src="http://www.w3.org/StyleSheets/TR/2016/logos/W3C" id="test" class="image" alt="zhimg">
+    <img src="https://heapanalytics.com/img/logo_home.png" alt="zhimg" class="js-image">
+    <img src="https://heapanalytics.com/img/not-exist.png" alt="not-exist" class="js-image">
+    <div id="spa">spa state</div>
+  </body>
+  <script src="/assets/scripts/none.js"></script>
+  <script>
+    setTimeout(() => {
+      throw new TypeError("I'm a type error");
+      c = b;
+    }, 1000)
+
+    var xhr2 = new XMLHttpRequest()
+
+    xhr2.open("POST", "/api/user/login", true)
+    xhr2.send({ name: "test", password: "123456" })
+
+    var xhr3 = new XMLHttpRequest()
+
+    xhr3.open("GET", "https://www.bing.com/th?id=OJ.BXLSFaX0nGty0g&amp;pid=MSNJVFeeds", true)
+    xhr3.send({ data: "1" })
+
+    setTimeout(() => {
+      window.history.pushState({ foo: "bar" }, 'spa page', 'spa');
+      document.querySelector('#spa').innerText = 'spa state: ' + history.state.foo;
+    }, 2000)
+  </script>
+</html>

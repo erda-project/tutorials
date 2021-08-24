@@ -1,0 +1,24 @@
+version: "2.0"
+services:
+  web:
+    image: "nginx:latest"
+    resources:
+      cpu: 0.1
+      mem: 128
+    deployments:
+      replicas: 1
+    ports:
+      - 80
+    expose:
+      - 80
+    health_check:
+      http:
+        port: 80
+        path: "/"
+        duration: 30
+addons:
+  日志分析:
+    plan: "log-analytics:basic"
+    options:
+      version: "2.0.0"
+envs: {}
